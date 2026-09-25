@@ -1,0 +1,19 @@
+BAS-HAR Model Evaluation Report
+Model: C:\Users\Nikhil\AppData\Local\Temp\tmp06orq7aa\models\activity_model\activity_lstm.pth
+Total Test Sequences: 10
+Overall Accuracy: 0.00%
+
+              precision    recall  f1-score   support
+
+    standing     0.0000    0.0000    0.0000       0.0
+     walking     0.0000    0.0000    0.0000       0.0
+    reaching     0.0000    0.0000    0.0000      10.0
+
+    accuracy                         0.0000      10.0
+   macro avg     0.0000    0.0000    0.0000      10.0
+weighted avg     0.0000    0.0000    0.0000      10.0
+
+Confusion Matrix:
+[[0 0 0]
+ [0 0 0]
+ [9 1 0]]
