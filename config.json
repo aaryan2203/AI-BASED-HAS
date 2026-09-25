@@ -1,0 +1,86 @@
+{
+    "system": {
+        "name": "BAS-HAR",
+        "description": "General-Purpose Offline Human Activity Recognition System for BAS Experiments",
+        "version": "2.0.0"
+    },
+    "model": {
+        "architecture": "LSTM",
+        "sequence_length": 30,
+        "input_size": 100,
+        "hidden_size": 128,
+        "num_layers": 2,
+        "dropout": 0.3,
+        "bidirectional": false,
+        "model_path": "models/activity_model/activity_lstm.pth",
+        "labels_path": "models/activity_model/labels.json",
+        "metadata_path": "models/activity_model/metadata.json",
+        "history_path": "models/activity_model/training_history.json"
+    },
+    "inference": {
+        "confidence_threshold": 0.50,
+        "prediction_smoothing": "majority_vote",
+        "smoothing_window": 7,
+        "unknown_label": "Unknown",
+        "target_fps": 30
+    },
+    "pose": {
+        "enabled": true,
+        "model_path": "yolo11n-pose.pt",
+        "confidence_threshold": 0.40,
+        "keypoint_threshold": 0.30
+    },
+    "object_detection": {
+        "enabled": false,
+        "model_path": "yolo11n.pt",
+        "confidence_threshold": 0.45,
+        "relevant_classes": [
+            "bottle",
+            "cup",
+            "bowl",
+            "remote",
+            "cell phone",
+            "laptop",
+            "scissors",
+            "book"
+        ]
+    },
+    "dataset": {
+        "raw_dir": "data/raw",
+        "processed_dir": "data/processed",
+        "sequences_dir": "data/sequences",
+        "sequence_length": 30,
+        "sequence_stride": 10,
+        "min_samples_per_class": 5,
+        "train_split": 0.70,
+        "val_split": 0.15,
+        "test_split": 0.15
+    },
+    "training": {
+        "batch_size": 32,
+        "epochs": 50,
+        "learning_rate": 0.001,
+        "weight_decay": 1e-4,
+        "patience": 10,
+        "device": "auto"
+    },
+    "camera": {
+        "source": 0,
+        "width": 1280,
+        "height": 720,
+        "fps": 30
+    },
+    "logging": {
+        "log_dir": "logs",
+        "inference_log": "logs/inference.log",
+        "training_log": "logs/training.log",
+        "activity_timeline_csv": "logs/activity_timeline.csv",
+        "log_level": "INFO"
+    },
+    "gui": {
+        "title": "BAS-HAR: Offline Human Activity Recognition",
+        "width": 1360,
+        "height": 820,
+        "theme": "dark"
+    }
+}
