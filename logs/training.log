@@ -1,0 +1,16 @@
+2026-09-25 22:54:18,508 [INFO] ============================================================
+2026-09-25 22:54:18,509 [INFO] Starting BAS-HAR Training Pipeline
+2026-09-25 22:54:18,509 [INFO] ============================================================
+2026-09-25 22:54:18,562 [INFO] Loaded Train samples: 190, Validation samples: 41
+2026-09-25 22:54:18,572 [INFO] Model configuration:
+2026-09-25 22:54:18,572 [INFO]   - Classes: 4 (['reaching', 'sitting', 'standing', 'walking'])
+2026-09-25 22:54:18,573 [INFO]   - Sequence Length: 30
+2026-09-25 22:54:18,573 [INFO]   - Input Dimension: 100
+2026-09-25 22:54:18,574 [INFO]   - Architecture: LSTM
+2026-09-25 22:54:18,577 [INFO] Training on device: cpu
+2026-09-25 22:54:22,486 [INFO] Epoch [  1/ 50] - Train Loss: 1.3898, Train Acc: 22.11% | Val Loss: 1.3872, Val Acc: 31.71%
+2026-09-25 22:54:23,371 [INFO] Epoch [  5/ 50] - Train Loss: 1.3854, Train Acc: 25.26% | Val Loss: 1.3966, Val Acc: 21.95%
+2026-09-25 22:54:24,380 [INFO] Epoch [ 10/ 50] - Train Loss: 1.3750, Train Acc: 27.89% | Val Loss: 1.4231, Val Acc: 21.95%
+2026-09-25 22:54:24,579 [INFO] Early stopping triggered at epoch 11
+2026-09-25 22:54:24,580 [INFO] Training completed in 2.44 seconds. Best Validation Acc: 31.71%
+2026-09-25 22:54:25,336 [INFO] Model and training artifacts saved successfully.

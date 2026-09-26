@@ -1,0 +1,67 @@
+2026-09-23 23:20:03 [INFO] BAS-HAR.Dataset: Validating dataset at C:\Users\Nikhil\.gemini\antigravity\scratch\BAS-HAR\data\raw...
+2026-09-23 23:20:03 [ERROR] BAS-HAR.Dataset: No activity class folders found inside: C:\Users\Nikhil\.gemini\antigravity\scratch\BAS-HAR\data\raw
+2026-09-24 13:19:33 [INFO] src.config: Configuration loaded from C:\Users\Nikhil\OneDrive\Desktop\BAS ALL CODES\BAS-HAR_ANTI\config.json
+2026-09-24 13:19:45 [INFO] src.pose_estimation: Loading pose model from yolo11n-pose.pt on device=cpu
+2026-09-24 13:19:51 [INFO] src.pose_estimation: Pose model loaded successfully.
+2026-09-24 13:19:51 [WARNING] src.activity_recognition: HAR labels not found at C:\Users\Nikhil\OneDrive\Desktop\BAS ALL CODES\BAS-HAR_ANTI\models\activity_model\labels.json. Please train a model.
+2026-09-24 13:19:51 [INFO] BAS-HAR.InferenceThread: Opening video source: 0
+2026-09-24 13:20:00 [INFO] BAS-HAR.InferenceThread: Inference worker finished.
+2026-09-25 11:07:35 [INFO] src.config: Configuration loaded from C:\Users\Nikhil\OneDrive\Desktop\BAS ALL CODES\BAS-HAR_ANTI\config.json
+2026-09-25 11:07:53 [INFO] src.pose_estimation: Loading pose model from yolo11n-pose.pt on device=cpu
+2026-09-25 11:07:53 [INFO] src.pose_estimation: Pose model loaded successfully.
+2026-09-25 11:07:53 [WARNING] src.activity_recognition: HAR labels not found at C:\Users\Nikhil\OneDrive\Desktop\BAS ALL CODES\BAS-HAR_ANTI\models\activity_model\labels.json. Please train a model.
+2026-09-25 11:07:53 [INFO] BAS-HAR.InferenceThread: Opening video source: 0
+2026-09-25 11:08:41 [INFO] BAS-HAR.InferenceThread: Inference worker finished.
+2026-09-25 11:28:14 [INFO] src.config: Configuration loaded from C:\Users\Nikhil\OneDrive\Desktop\BAS ALL CODES\BAS-HAR_ANTI\config.json
+2026-09-25 11:28:34 [INFO] src.pose_estimation: Loading pose model from yolo11n-pose.pt on device=cpu
+2026-09-25 11:29:00 [INFO] src.pose_estimation: Pose model loaded successfully.
+2026-09-25 11:29:00 [WARNING] src.activity_recognition: HAR labels not found at C:\Users\Nikhil\OneDrive\Desktop\BAS ALL CODES\BAS-HAR_ANTI\models\activity_model\labels.json. Please train a model.
+2026-09-25 11:29:00 [INFO] BAS-HAR.InferenceThread: Opening video source: C:/Users/Nikhil/OneDrive/Desktop/BAS ALL CODES/BAS/recordings/create_video_of_indian_astrona.mp4
+2026-09-25 11:29:36 [INFO] BAS-HAR.InferenceThread: Video stream ended or frame empty.
+2026-09-25 11:29:36 [INFO] BAS-HAR.InferenceThread: Inference worker finished.
+2026-09-25 22:31:08 [INFO] src.config: Configuration loaded from C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\config.json
+2026-09-25 22:44:18 [INFO] BAS-HAR.Dataset: Validating dataset at C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\data\raw...
+2026-09-25 22:44:18 [ERROR] BAS-HAR.Dataset: No activity class folders found inside: C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\data\raw
+2026-09-25 22:45:55 [INFO] BAS-HAR.Dataset: Validating dataset at C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\data\raw...
+2026-09-25 22:45:55 [WARNING] BAS-HAR.Dataset: Class folder 'reaching' has no supported video files.
+2026-09-25 22:45:55 [WARNING] BAS-HAR.Dataset: Class folder 'sitting' has no supported video files.
+2026-09-25 22:45:55 [WARNING] BAS-HAR.Dataset: Class folder 'standing' has no supported video files.
+2026-09-25 22:45:55 [WARNING] BAS-HAR.Dataset: Class folder 'walking' has no supported video files.
+2026-09-25 22:45:55 [ERROR] BAS-HAR.Dataset: No class folders contain valid video files.
+2026-09-25 22:47:23 [INFO] BAS-HAR.Dataset: Validating dataset at C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\data\raw...
+2026-09-25 22:47:23 [INFO] BAS-HAR.Dataset: Saved 4 dynamic classes to C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\models\activity_model\labels.json
+2026-09-25 22:47:28 [INFO] src.pose_estimation: Loading pose model from C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\yolo11n-pose.pt on device=cpu
+2026-09-25 22:47:28 [INFO] src.pose_estimation: Pose model loaded successfully.
+2026-09-25 22:47:28 [INFO] BAS-HAR.Dataset: Processing class 'reaching' (2 videos)...
+2026-09-25 22:49:16 [INFO] BAS-HAR.Dataset: Processing class 'sitting' (2 videos)...
+2026-09-25 22:50:38 [INFO] BAS-HAR.Dataset: Processing class 'standing' (2 videos)...
+2026-09-25 22:52:00 [INFO] BAS-HAR.Dataset: Processing class 'walking' (2 videos)...
+2026-09-25 22:53:25 [INFO] BAS-HAR.Dataset: Extracted 272 total sequences of shape (30, 100)
+2026-09-25 22:53:25 [INFO] BAS-HAR.Dataset:   - Class 'reaching': 68 sequences
+2026-09-25 22:53:25 [INFO] BAS-HAR.Dataset:   - Class 'sitting': 68 sequences
+2026-09-25 22:53:25 [INFO] BAS-HAR.Dataset:   - Class 'standing': 68 sequences
+2026-09-25 22:53:25 [INFO] BAS-HAR.Dataset:   - Class 'walking': 68 sequences
+2026-09-25 22:53:36 [INFO] BAS-HAR.Dataset: Dataset preparation complete! Splits saved in C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\data\sequences
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train: ============================================================
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train: Starting BAS-HAR Training Pipeline
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train: ============================================================
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train: Loaded Train samples: 190, Validation samples: 41
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train: Model configuration:
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train:   - Classes: 4 (['reaching', 'sitting', 'standing', 'walking'])
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train:   - Sequence Length: 30
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train:   - Input Dimension: 100
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train:   - Architecture: LSTM
+2026-09-25 22:54:18 [INFO] BAS-HAR.Train: Training on device: cpu
+2026-09-25 22:54:22 [INFO] BAS-HAR.Train: Epoch [  1/ 50] - Train Loss: 1.3898, Train Acc: 22.11% | Val Loss: 1.3872, Val Acc: 31.71%
+2026-09-25 22:54:23 [INFO] BAS-HAR.Train: Epoch [  5/ 50] - Train Loss: 1.3854, Train Acc: 25.26% | Val Loss: 1.3966, Val Acc: 21.95%
+2026-09-25 22:54:24 [INFO] BAS-HAR.Train: Epoch [ 10/ 50] - Train Loss: 1.3750, Train Acc: 27.89% | Val Loss: 1.4231, Val Acc: 21.95%
+2026-09-25 22:54:24 [INFO] BAS-HAR.Train: Early stopping triggered at epoch 11
+2026-09-25 22:54:24 [INFO] BAS-HAR.Train: Training completed in 2.44 seconds. Best Validation Acc: 31.71%
+2026-09-25 22:54:25 [INFO] BAS-HAR.Train: Model and training artifacts saved successfully.
+2026-09-25 23:04:22 [INFO] src.config: Configuration loaded from C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\config.json
+2026-09-25 23:04:33 [INFO] src.pose_estimation: Loading pose model from C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\yolo11n-pose.pt on device=cpu
+2026-09-25 23:04:33 [INFO] src.pose_estimation: Pose model loaded successfully.
+2026-09-25 23:04:33 [INFO] src.activity_recognition: Loaded 4 activity labels from C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\models\activity_model\labels.json
+2026-09-25 23:04:33 [INFO] src.activity_recognition: Loaded HAR model successfully from C:\Users\Nikhil\OneDrive\Desktop\BAS CODES\BAS-HAR_ANTI\models\activity_model\activity_lstm.pth
+2026-09-25 23:04:33 [INFO] BAS-HAR.InferenceThread: Opening video source: 0
+2026-09-25 23:04:49 [INFO] BAS-HAR.InferenceThread: Inference worker finished.
