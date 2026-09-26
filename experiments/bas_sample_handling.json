@@ -1,0 +1,110 @@
+{
+    "experiment_name": "BAS Sample Handling",
+    "experiment_id": "bas_sample_handling_v1",
+    "description": "Standard sample handling procedure for BAS experiment rack",
+    "version": "1.0",
+    "steps": [
+        {
+            "id": "approach_rack",
+            "name": "Approach Rack",
+            "display_name": "Approach Experiment Rack",
+            "description": "Move to within operational distance of the experiment rack",
+            "expected_objects": ["astronaut"],
+            "expected_interaction": null,
+            "detection_hints": {
+                "person_near_rack": true,
+                "min_person_size_ratio": 0.3
+            }
+        },
+        {
+            "id": "pick_container",
+            "name": "Pick Container",
+            "display_name": "Pick Up Sample Container",
+            "description": "Grasp and lift the sample container from the rack",
+            "expected_objects": ["astronaut", "sample_container"],
+            "expected_interaction": "hand_near_container",
+            "detection_hints": {
+                "hand_object_proximity": "sample_container",
+                "motion": "reaching"
+            }
+        },
+        {
+            "id": "open_container",
+            "name": "Open Container",
+            "display_name": "Open the Container",
+            "description": "Open the lid of the sample container",
+            "expected_objects": ["astronaut", "sample_container"],
+            "expected_interaction": "hand_on_container_lid",
+            "detection_hints": {
+                "two_hands_on_object": true,
+                "motion": "twisting"
+            }
+        },
+        {
+            "id": "remove_sample",
+            "name": "Remove Sample",
+            "display_name": "Remove Sample from Container",
+            "description": "Carefully remove the sample from the opened container",
+            "expected_objects": ["astronaut", "sample_container", "sample"],
+            "expected_interaction": "hand_in_container",
+            "detection_hints": {
+                "hand_inside_object": "sample_container",
+                "motion": "extracting"
+            }
+        },
+        {
+            "id": "place_sample",
+            "name": "Place Sample",
+            "display_name": "Place Sample into Experiment Device",
+            "description": "Transfer and place the sample into the experiment device",
+            "expected_objects": ["astronaut", "sample", "experiment_device"],
+            "expected_interaction": "hand_near_device",
+            "detection_hints": {
+                "hand_object_proximity": "experiment_device",
+                "motion": "placing"
+            }
+        },
+        {
+            "id": "press_button",
+            "name": "Press Button",
+            "display_name": "Press Confirmation Button",
+            "description": "Press the confirmation button on the experiment device",
+            "expected_objects": ["astronaut", "button"],
+            "expected_interaction": "hand_on_button",
+            "detection_hints": {
+                "hand_object_proximity": "button",
+                "motion": "pressing"
+            }
+        },
+        {
+            "id": "close_container",
+            "name": "Close Container",
+            "display_name": "Close the Container",
+            "description": "Close the lid of the sample container",
+            "expected_objects": ["astronaut", "sample_container"],
+            "expected_interaction": "hand_on_container_lid",
+            "detection_hints": {
+                "two_hands_on_object": true,
+                "motion": "closing"
+            }
+        },
+        {
+            "id": "return_tool",
+            "name": "Return Tool",
+            "display_name": "Return Tool to Rack",
+            "description": "Return the container and any tools to the experiment rack",
+            "expected_objects": ["astronaut"],
+            "expected_interaction": null,
+            "detection_hints": {
+                "person_moving_away": true,
+                "objects_stationary": true
+            }
+        }
+    ],
+    "metadata": {
+        "estimated_duration_minutes": 5,
+        "difficulty": "standard",
+        "safety_critical": false,
+        "requires_two_astronauts": false
+    }
+}
