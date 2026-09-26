@@ -1,22 +1,11 @@
-# BAS-HAR: Offline Human Activity Recognition System
+# BAS-HAR: Human Activity Recognition for On-Board BAS Experiments
 
-General-purpose, dataset-driven **Human Activity Recognition (HAR) framework for BAS experiments**. Recognizes human activities from live camera feeds, recorded videos, or uploaded files using local computer vision and temporal deep learning models.
+AI-powered onboard assistant for monitoring astronaut activities during predefined scientific experiments on a space station. Processes camera data locally at the edge — no cloud APIs required.
 
-The system operates **100% offline** without any cloud APIs, external network calls, or hard-coded activity sequences.
-
----
-
-## 1. Key Principles & Philosophy
-
-* **No Fixed Activity Sequence**: Activities are recognized independently at each moment in time. The system answers *"What activity is the person performing right now?"* rather than *"What step of a predefined experiment should happen next?"*
-* **Dataset-Driven Activity Classes**: Activity categories are discovered dynamically from the dataset directory structure (`data/raw/<activity_name>/`). Adding a new folder automatically updates the number of classes upon retraining.
-* **Modular Vision Pipeline**: Works with **Pose Only** (default) or **Pose + Object Detection** (modular toggle).
-* **Scale & Translation Invariant**: Normalizes 17-keypoint 2D human skeletons relative to pelvis center and torso scale, ensuring robust recognition regardless of camera distance, body size, or location in frame.
-* **Temporal Modeling**: Slices features into temporal sequences (`sequence_length = 30`) and classifies movements using recurrent deep learning networks (LSTM or GRU).
-* **Prediction Smoothing & Uncertainty**: Applies temporal filtering (majority voting or moving averages) and flags low-confidence predictions as `Unknown`.
-* **Activity Segmentation & Timeline**: Automatically records start time, end time, duration, and confidence for each activity segment and logs events to `logs/activity_timeline.csv`.
-
----
+![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.1+-red.svg)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.8+-green.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 2. System Architecture
 
@@ -71,7 +60,22 @@ The system operates **100% offline** without any cloud APIs, external network ca
        └───────────────┘               └───────────────┘
 ```
 
----
+## Features
+
+| Feature | Status | Description |
+|---------|--------|-------------|
+| Person Detection | ✅ Ready | YOLO-based astronaut detection |
+| Object Detection | ✅ Ready | Configurable experiment objects (COCO pretrained + custom training) |
+| Pose Estimation | ✅ Ready | 17-keypoint COCO skeleton tracking |
+| Hand-Object Interaction | ✅ Ready | Spatial proximity + temporal tracking |
+| Activity Recognition | ✅ Ready | LSTM/GRU model + rule-based demo mode |
+| Sequence Validation | ✅ Ready | State-machine with temporal confirmation |
+| Voice Alerts | ✅ Ready | Offline TTS (English + Hindi) |
+| Experiment Logging | ✅ Ready | SQLite + JSON/CSV/TXT export |
+| Video Recording | ✅ Ready | Timestamped MP4 recording |
+| Network Streaming | ✅ Ready | MJPEG over HTTP |
+| GUI Dashboard | ✅ Ready | PySide6 dark-themed dashboard |
+| HMR/3D Pose | 🔬 Stub | Interface defined, see `models/hmr/README.md` |
 
 ## 3. Project Structure
 
