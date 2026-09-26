@@ -1,0 +1,18 @@
+{
+    "architecture": "LSTM",
+    "input_size": 100,
+    "hidden_size": 128,
+    "num_layers": 2,
+    "sequence_length": 30,
+    "num_classes": 4,
+    "classes": {
+        "0": "reaching",
+        "1": "sitting",
+        "2": "standing",
+        "3": "walking"
+    },
+    "best_val_acc": 0.3171,
+    "total_epochs_trained": 11,
+    "training_time_sec": 2.44,
+    "timestamp": "2026-09-25 22:54:24"
+}
