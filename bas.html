@@ -1,0 +1,2970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BAS-HAR | Human Activity Recognition</title>
+
+<meta name="description"
+content="BAS-HAR — Offline Human Activity Recognition for Biological and Experimental Systems">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+:root {
+    --bg: #05060b;
+    --bg2: #080b14;
+    --card: rgba(14, 18, 31, 0.72);
+    --card2: rgba(20, 25, 42, 0.65);
+
+    --cyan: #00eaff;
+    --blue: #4d7cff;
+    --purple: #9d4edd;
+    --pink: #ff3cac;
+
+    --text: #f5f7ff;
+    --muted: #9ca6bd;
+    --border: rgba(255,255,255,0.09);
+
+    --green: #00ff9d;
+    --yellow: #ffd166;
+    --red: #ff4d6d;
+
+    --radius: 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(circle at 10% 10%, rgba(0,234,255,0.08), transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(157,78,221,0.08), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(255,60,172,0.06), transparent 30%),
+        var(--bg);
+
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: -2;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background:
+        radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.55));
+
+    pointer-events: none;
+    z-index: -1;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.container {
+    width: min(1200px, 92%);
+    margin: auto;
+}
+
+section {
+    padding: 110px 0;
+    position: relative;
+}
+
+section:not(:first-child)::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 80%;
+    height: 1px;
+    transform: translateX(-50%);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(0,234,255,0.3),
+            rgba(157,78,221,0.3),
+            transparent
+        );
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 65px;
+}
+
+.section-title span {
+    display: inline-block;
+    font-family: Orbitron;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    margin-bottom: 15px;
+}
+
+.section-title h2 {
+    font-family: Orbitron;
+    font-size: clamp(30px, 5vw, 52px);
+    margin-bottom: 15px;
+}
+
+.section-title p {
+    max-width: 700px;
+    margin: auto;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    backdrop-filter: blur(18px);
+    background: rgba(5,6,11,0.65);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.nav-inner {
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-family: Orbitron;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.logo-symbol {
+    width: 38px;
+    height: 38px;
+
+    border: 2px solid var(--cyan);
+    border-radius: 50%;
+
+    position: relative;
+
+    box-shadow:
+        0 0 15px rgba(0,234,255,0.5),
+        inset 0 0 15px rgba(0,234,255,0.15);
+}
+
+.logo-symbol::before,
+.logo-symbol::after {
+    content: "";
+    position: absolute;
+
+    width: 28px;
+    height: 14px;
+
+    border: 2px solid var(--cyan);
+    border-radius: 50%;
+
+    left: 3px;
+    top: 10px;
+}
+
+.logo-symbol::after {
+    transform: rotate(90deg);
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-links a {
+    color: var(--muted);
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--cyan);
+}
+
+.menu-btn {
+    display: none;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+
+    padding-top: 120px;
+
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    text-align: center;
+    margin: auto;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 9px 16px;
+
+    border: 1px solid rgba(0,255,157,0.25);
+    border-radius: 50px;
+
+    background: rgba(0,255,157,0.05);
+
+    color: var(--green);
+
+    font-family: Orbitron;
+    font-size: 11px;
+    letter-spacing: 2px;
+
+    margin-bottom: 30px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow: 0 0 15px var(--green);
+
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: 0.3;
+        transform: scale(0.7);
+    }
+}
+
+.hero h1 {
+    font-family: Orbitron;
+
+    font-size: clamp(48px, 9vw, 105px);
+
+    line-height: 0.95;
+
+    letter-spacing: -4px;
+
+    margin-bottom: 30px;
+
+    background:
+        linear-gradient(
+            120deg,
+            #fff,
+            var(--cyan),
+            var(--blue),
+            var(--purple),
+            var(--pink)
+        );
+
+    -webkit-background-clip: text;
+    color: transparent;
+
+    background-size: 300%;
+
+    animation: gradientMove 7s infinite alternate;
+}
+
+@keyframes gradientMove {
+    from {
+        background-position: 0%;
+    }
+
+    to {
+        background-position: 100%;
+    }
+}
+
+.hero-subtitle {
+    font-size: clamp(18px, 2vw, 25px);
+    color: #d8def0;
+    margin-bottom: 20px;
+}
+
+.hero-description {
+    max-width: 750px;
+    margin: auto;
+
+    color: var(--muted);
+
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    margin-top: 40px;
+
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 14px 25px;
+
+    border-radius: 10px;
+
+    font-family: Orbitron;
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+    transition: 0.3s;
+
+    border: 1px solid var(--border);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: #02050a;
+
+    box-shadow: 0 0 30px rgba(0,234,255,0.25);
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.04);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-4px);
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+
+    margin-top: 70px;
+}
+
+.stat {
+    padding: 25px;
+
+    text-align: center;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    backdrop-filter: blur(15px);
+}
+
+.stat-number {
+    font-family: Orbitron;
+    font-size: 28px;
+    color: var(--cyan);
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+
+.card {
+    background: linear-gradient(
+        145deg,
+        rgba(20,25,42,0.8),
+        rgba(8,11,20,0.8)
+    );
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 30px;
+
+    backdrop-filter: blur(18px);
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition: 0.4s;
+}
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    top: -70px;
+    right: -70px;
+
+    border-radius: 50%;
+
+    background: var(--cyan);
+
+    filter: blur(70px);
+
+    opacity: 0.12;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+
+    border-color: rgba(0,234,255,0.35);
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.35),
+        0 0 30px rgba(0,234,255,0.05);
+}
+
+.card-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    font-family: Orbitron;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   PROBLEM / SOLUTION
+========================================================= */
+
+.split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.panel {
+    padding: 40px;
+
+    border-radius: var(--radius);
+
+    border: 1px solid var(--border);
+
+    background: var(--card);
+}
+
+.panel h3 {
+    font-family: Orbitron;
+    margin-bottom: 25px;
+}
+
+.panel ul {
+    list-style: none;
+}
+
+.panel li {
+    margin: 15px 0;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.panel li::before {
+    content: "▹";
+    color: var(--cyan);
+    margin-right: 10px;
+}
+
+
+/* =========================================================
+   ARCHITECTURE
+========================================================= */
+
+.pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+.pipeline-step {
+    width: 155px;
+    min-height: 130px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 20px;
+
+    background: var(--card);
+
+    border: 1px solid rgba(0,234,255,0.18);
+
+    border-radius: 18px;
+
+    position: relative;
+}
+
+.pipeline-step strong {
+    font-family: Orbitron;
+    font-size: 12px;
+
+    margin-bottom: 8px;
+}
+
+.pipeline-step span {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.arrow {
+    color: var(--cyan);
+    font-size: 22px;
+}
+
+
+/* =========================================================
+   MODEL
+========================================================= */
+
+.model-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    overflow: hidden;
+}
+
+.model-table th,
+.model-table td {
+    padding: 17px 20px;
+
+    border-bottom: 1px solid var(--border);
+
+    text-align: left;
+}
+
+.model-table th {
+    font-family: Orbitron;
+    color: var(--cyan);
+
+    font-size: 12px;
+}
+
+.model-table td {
+    color: var(--muted);
+}
+
+.model-table tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   CODE
+========================================================= */
+
+.code-box {
+    background: #02040a;
+
+    border: 1px solid rgba(0,234,255,0.15);
+
+    border-radius: 15px;
+
+    padding: 25px;
+
+    overflow-x: auto;
+
+    box-shadow:
+        inset 0 0 40px rgba(0,234,255,0.025);
+}
+
+.code-header {
+    display: flex;
+    gap: 7px;
+
+    margin-bottom: 20px;
+}
+
+.code-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #444;
+}
+
+pre {
+    font-family: "Courier New", monospace;
+    color: #c9d4f5;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.green {
+    color: var(--green);
+}
+
+.cyan {
+    color: var(--cyan);
+}
+
+.purple {
+    color: #c77dff;
+}
+
+.yellow {
+    color: var(--yellow);
+}
+
+
+/* =========================================================
+   DATASET
+========================================================= */
+
+.folder {
+    background: #03050b;
+
+    border: 1px solid var(--border);
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    font-family: monospace;
+
+    line-height: 2;
+
+    color: #b8c2db;
+
+    overflow-x: auto;
+}
+
+.folder .folder-name {
+    color: var(--cyan);
+}
+
+.folder .file {
+    color: #a8b1c9;
+}
+
+
+/* =========================================================
+   COMMANDS
+========================================================= */
+
+.commands {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+}
+
+.command {
+    background: #03050a;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    font-family: monospace;
+
+    color: var(--green);
+}
+
+.command small {
+    display: block;
+
+    color: var(--muted);
+
+    font-family: Inter;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   ROADMAP
+========================================================= */
+
+.timeline {
+    position: relative;
+
+    max-width: 850px;
+
+    margin: auto;
+}
+
+.timeline::before {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 0;
+    bottom: 0;
+
+    width: 1px;
+
+    background:
+        linear-gradient(
+            var(--cyan),
+            var(--purple),
+            var(--pink)
+        );
+}
+
+.timeline-item {
+    width: 50%;
+
+    padding: 15px 40px;
+
+    position: relative;
+}
+
+.timeline-item:nth-child(even) {
+    margin-left: 50%;
+}
+
+.timeline-content {
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    padding: 25px;
+
+    border-radius: 16px;
+}
+
+.timeline-content h3 {
+    font-family: Orbitron;
+    font-size: 15px;
+
+    margin-bottom: 8px;
+}
+
+.timeline-content p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   STATUS DASHBOARD
+========================================================= */
+
+.dashboard {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+.monitor {
+    background: #02040a;
+
+    border: 1px solid rgba(0,234,255,0.15);
+
+    border-radius: 18px;
+
+    padding: 25px;
+}
+
+.monitor-title {
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+
+    font-family: Orbitron;
+    font-size: 12px;
+}
+
+.monitor-row {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+
+    font-size: 13px;
+}
+
+.monitor-row span:first-child {
+    color: var(--muted);
+}
+
+.online {
+    color: var(--green);
+}
+
+.warning {
+    color: var(--yellow);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    padding: 60px 0;
+
+    border-top: 1px solid var(--border);
+
+    text-align: center;
+
+    background: rgba(0,0,0,0.25);
+}
+
+.footer-logo {
+    font-family: Orbitron;
+
+    font-size: 22px;
+
+    margin-bottom: 15px;
+}
+
+footer p {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+
+    gap: 25px;
+
+    margin-top: 20px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.footer-links a:hover {
+    color: var(--cyan);
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+.reveal {
+    opacity: 0;
+
+    transform: translateY(40px);
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 900px) {
+
+    .nav-links {
+        position: absolute;
+
+        top: 75px;
+
+        left: 0;
+
+        width: 100%;
+
+        background: rgba(5,6,11,0.95);
+
+        flex-direction: column;
+
+        padding: 25px;
+
+        display: none;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .split,
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .commands {
+        grid-template-columns: 1fr;
+    }
+
+    .timeline::before {
+        left: 10px;
+    }
+
+    .timeline-item,
+    .timeline-item:nth-child(even) {
+        width: 100%;
+
+        margin-left: 0;
+
+        padding-left: 35px;
+
+        padding-right: 0;
+    }
+
+}
+
+@media(max-width: 600px) {
+
+    section {
+        padding: 80px 0;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .hero h1 {
+        letter-spacing: -2px;
+    }
+
+    .pipeline {
+        flex-direction: column;
+    }
+
+    .arrow {
+        transform: rotate(90deg);
+    }
+
+    .panel {
+        padding: 25px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+<div class="container nav-inner">
+
+<a href="#home" class="logo">
+
+<div class="logo-symbol"></div>
+
+<span>BAS-HAR</span>
+
+</a>
+
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<div class="nav-links">
+
+<a href="#overview">Overview</a>
+<a href="#architecture">Architecture</a>
+<a href="#model">AI Model</a>
+<a href="#dataset">Dataset</a>
+<a href="#gui">GUI</a>
+<a href="#roadmap">Roadmap</a>
+
+</div>
+
+</div>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="home">
+
+<div class="container">
+
+<div class="hero-content">
+
+<div class="status">
+
+<div class="status-dot"></div>
+
+OFFLINE AI SYSTEM
+
+</div>
+
+<h1>BAS-HAR</h1>
+
+<div class="hero-subtitle">
+
+Human Activity Recognition for BAS Experiments
+
+</div>
+
+<p class="hero-description">
+
+An offline computer-vision and deep-learning system designed to
+recognize human activities during Biological and experimental
+operations. BAS-HAR processes video locally using pose estimation,
+feature extraction and an LSTM-based temporal recognition model.
+
+</p>
+
+<div class="hero-buttons">
+
+<a href="#architecture" class="btn btn-primary">
+EXPLORE SYSTEM
+</a>
+
+<a href="#model" class="btn btn-secondary">
+VIEW AI MODEL
+</a>
+
+</div>
+
+</div>
+
+
+<div class="stats">
+
+<div class="stat">
+
+<div class="stat-number">YOLO</div>
+
+<div class="stat-label">
+POSE ESTIMATION
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="stat-number">LSTM</div>
+
+<div class="stat-label">
+TEMPORAL RECOGNITION
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="stat-number">30</div>
+
+<div class="stat-label">
+FRAME SEQUENCE
+</div>
+
+</div>
+
+<div class="stat">
+
+<div class="stat-number">100</div>
+
+<div class="stat-label">
+MODEL INPUT FEATURES
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     OVERVIEW
+===================================================== -->
+
+<section id="overview">
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>01 // SYSTEM OVERVIEW</span>
+
+<h2>What is BAS-HAR?</h2>
+
+<p>
+BAS-HAR is an AI-powered Human Activity Recognition prototype
+designed to analyze activity sequences from video without
+depending on cloud-based inference.
+</p>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card reveal">
+
+<div class="card-icon">🛰️</div>
+
+<h3>Offline Intelligence</h3>
+
+<p>
+The recognition pipeline is designed to run locally on a
+standalone computer. Video does not need to be continuously
+uploaded to a remote server for inference.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">👤</div>
+
+<h3>Human Activity Recognition</h3>
+
+<p>
+The system converts visual human movement into temporal
+features and uses an LSTM model to classify activity patterns
+across multiple video frames.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">🧠</div>
+
+<h3>AI-Based Processing</h3>
+
+<p>
+YOLO pose estimation provides human keypoints, while a deep
+learning sequence model learns how movement evolves over time.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">📹</div>
+
+<h3>Video Processing</h3>
+
+<p>
+The system can process recorded video and can also operate
+through the graphical interface for visualizing predictions
+and activity timelines.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">⚡</div>
+
+<h3>Real-Time Pipeline</h3>
+
+<p>
+Pose detection, feature extraction and temporal inference are
+combined into a continuous recognition pipeline.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">🔬</div>
+
+<h3>Experiment Monitoring</h3>
+
+<p>
+The long-term goal is to recognize predefined experiment
+activities and provide local activity validation during
+experimental procedures.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     PROBLEM / SOLUTION
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>02 // MISSION CONTEXT</span>
+
+<h2>Problem & Solution</h2>
+
+</div>
+
+
+<div class="split">
+
+<div class="panel reveal">
+
+<h3>THE PROBLEM</h3>
+
+<ul>
+
+<li>
+Continuous transmission of raw video can require significant
+communication bandwidth.
+</li>
+
+<li>
+Remote environments may have communication delays or
+intermittent connectivity.
+</li>
+
+<li>
+Manual monitoring of long experimental procedures can be
+difficult.
+</li>
+
+<li>
+A generic activity-recognition model may not understand
+experiment-specific activities.
+</li>
+
+<li>
+Object interaction and human movement must be considered
+together for future BAS-specific recognition.
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="panel reveal">
+
+<h3>THE BAS-HAR APPROACH</h3>
+
+<ul>
+
+<li>
+Process the video locally instead of depending on cloud
+inference.
+</li>
+
+<li>
+Use pose estimation to represent human movement.
+</li>
+
+<li>
+Convert consecutive frames into temporal feature sequences.
+</li>
+
+<li>
+Use an LSTM to recognize activity patterns over time.
+</li>
+
+<li>
+Use confidence filtering so uncertain predictions can be
+shown as Unknown.
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     ARCHITECTURE
+===================================================== -->
+
+<section id="architecture">
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>03 // AI PIPELINE</span>
+
+<h2>System Architecture</h2>
+
+<p>
+BAS-HAR uses a multi-stage computer-vision pipeline that
+converts raw video into an activity prediction.
+</p>
+
+</div>
+
+
+<div class="pipeline reveal">
+
+<div class="pipeline-step">
+
+<strong>VIDEO</strong>
+
+<span>
+Camera / MP4 input
+</span>
+
+</div>
+
+<div class="arrow">→</div>
+
+
+<div class="pipeline-step">
+
+<strong>YOLO POSE</strong>
+
+<span>
+Human keypoint detection
+</span>
+
+</div>
+
+<div class="arrow">→</div>
+
+
+<div class="pipeline-step">
+
+<strong>FEATURES</strong>
+
+<span>
+Pose & motion representation
+</span>
+
+</div>
+
+<div class="arrow">→</div>
+
+
+<div class="pipeline-step">
+
+<strong>SEQUENCE</strong>
+
+<span>
+30 consecutive frames
+</span>
+
+</div>
+
+<div class="arrow">→</div>
+
+
+<div class="pipeline-step">
+
+<strong>LSTM</strong>
+
+<span>
+Temporal classification
+</span>
+
+</div>
+
+<div class="arrow">→</div>
+
+
+<div class="pipeline-step">
+
+<strong>OUTPUT</strong>
+
+<span>
+Activity + confidence
+</span>
+
+</div>
+
+</div>
+
+
+<div style="height:50px"></div>
+
+
+<div class="code-box reveal">
+
+<div class="code-header">
+
+<div class="code-dot"></div>
+<div class="code-dot"></div>
+<div class="code-dot"></div>
+
+</div>
+
+<pre>
+
+<span class="cyan">VIDEO FRAME</span>
+      │
+      ▼
+<span class="purple">YOLO11n-Pose</span>
+      │
+      ▼
+<span class="yellow">Human Keypoints</span>
+      │
+      ▼
+<span class="green">Feature Extraction</span>
+      │
+      ▼
+<span class="cyan">30-Frame Temporal Window</span>
+      │
+      ▼
+<span class="purple">LSTM Network</span>
+      │
+      ▼
+<span class="yellow">Activity Classification</span>
+      │
+      ▼
+<span class="green">Confidence Filtering</span>
+      │
+      ▼
+<span class="cyan">ACTIVITY / UNKNOWN</span>
+
+</pre>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     MODEL
+===================================================== -->
+
+<section id="model">
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>04 // DEEP LEARNING</span>
+
+<h2>AI Model</h2>
+
+<p>
+The current prototype uses a Long Short-Term Memory network
+for temporal activity recognition.
+</p>
+
+</div>
+
+
+<table class="model-table reveal">
+
+<tr>
+<th>PARAMETER</th>
+<th>VALUE</th>
+</tr>
+
+<tr>
+<td>Model Type</td>
+<td>LSTM</td>
+</tr>
+
+<tr>
+<td>Input Size</td>
+<td>100 features</td>
+</tr>
+
+<tr>
+<td>Sequence Length</td>
+<td>30 frames</td>
+</tr>
+
+<tr>
+<td>Hidden Size</td>
+<td>128</td>
+</tr>
+
+<tr>
+<td>LSTM Layers</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Dropout</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>Batch Size</td>
+<td>32</td>
+</tr>
+
+<tr>
+<td>Training Epochs</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>Learning Rate</td>
+<td>0.001</td>
+</tr>
+
+<tr>
+<td>Weight Decay</td>
+<td>0.0001</td>
+</tr>
+
+<tr>
+<td>Early Stopping</td>
+<td>10 epochs patience</td>
+</tr>
+
+<tr>
+<td>Confidence Threshold</td>
+<td>0.50</td>
+</tr>
+
+<tr>
+<td>Model File</td>
+<td>activity_lstm.pth</td>
+</tr>
+
+</table>
+
+
+<div style="height:30px"></div>
+
+
+<div class="grid">
+
+<div class="card reveal">
+
+<div class="card-icon">🔄</div>
+
+<h3>Temporal Learning</h3>
+
+<p>
+Instead of classifying one isolated frame, the LSTM receives
+a sequence of frames and learns movement patterns over time.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">🎯</div>
+
+<h3>Confidence Filtering</h3>
+
+<p>
+Predictions below the configured confidence threshold can be
+reported as Unknown instead of presenting a low-confidence
+activity as a reliable result.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">💾</div>
+
+<h3>PyTorch Model</h3>
+
+<p>
+The trained network is stored as a PyTorch <code>.pth</code>
+model and loaded locally during inference.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CURRENT CLASSES
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>05 // CURRENT PROTOTYPE</span>
+
+<h2>Recognized Activities</h2>
+
+<p>
+The existing prototype model contains four generic human
+activity classes.
+</p>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card reveal">
+
+<div class="card-icon">🚶</div>
+
+<h3>Walking</h3>
+
+<p>
+Movement pattern corresponding to a person walking through
+the observed environment.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">🧍</div>
+
+<h3>Standing</h3>
+
+<p>
+Stationary upright posture detected over the temporal sequence.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">🪑</div>
+
+<h3>Sitting</h3>
+
+<p>
+Temporal pose pattern associated with a seated person.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">🤚</div>
+
+<h3>Reaching</h3>
+
+<p>
+Movement pattern associated with extending the body or arms
+toward an object or location.
+</p>
+
+</div>
+
+</div>
+
+
+<div style="height:35px"></div>
+
+
+<div class="panel reveal">
+
+<h3>Prototype Model Status</h3>
+
+<p style="color:var(--muted);line-height:1.8">
+
+The current model is a pipeline-validation model rather than
+the final BAS-specific activity model. Its observed best
+validation accuracy was approximately <strong style="color:var(--cyan)">
+31.71%</strong>. The next development stage is to create a
+proper BAS-specific dataset and retrain the model using
+experiment-specific activity classes.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     DATASET
+===================================================== -->
+
+<section id="dataset">
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>06 // DATA ENGINEERING</span>
+
+<h2>BAS Dataset</h2>
+
+<p>
+The quality of the final recognition system depends heavily
+on correctly labeled and sufficiently varied activity videos.
+</p>
+
+</div>
+
+
+<div class="split">
+
+<div class="panel reveal">
+
+<h3>DATASET PRINCIPLES</h3>
+
+<ul>
+
+<li>
+Each video should represent the activity indicated by its
+folder.
+</li>
+
+<li>
+Do not place the same video into multiple activity folders
+with different labels.
+</li>
+
+<li>
+Capture different body positions, speeds and viewpoints.
+</li>
+
+<li>
+Include variations in lighting and environment where possible.
+</li>
+
+<li>
+Keep a separate collection of unseen videos for testing.
+</li>
+
+<li>
+BAS-specific activities should be defined according to the
+actual experiment procedure.
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="panel reveal">
+
+<h3>RECOMMENDED DEVELOPMENT DATASET</h3>
+
+<ul>
+
+<li>
+Begin with approximately 10–20 varied videos per activity
+for an initial prototype.
+</li>
+
+<li>
+Increase the number of examples as the activity vocabulary
+grows.
+</li>
+
+<li>
+Use the configured train/validation/test split.
+</li>
+
+<li>
+Evaluate using videos that were not used during training.
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+
+<div style="height:35px"></div>
+
+
+<div class="folder reveal">
+
+<span class="folder-name">BAS-HAR/</span><br>
+
+├── <span class="folder-name">data/</span><br>
+
+│   ├── <span class="folder-name">raw/</span><br>
+
+│   │   ├── <span class="folder-name">activity_1/</span><br>
+
+│   │   │   ├── <span class="file">video01.mp4</span><br>
+
+│   │   │   ├── <span class="file">video02.mp4</span><br>
+
+│   │   │   └── <span class="file">...</span><br>
+
+│   │   ├── <span class="folder-name">activity_2/</span><br>
+
+│   │   └── <span class="folder-name">activity_3/</span><br>
+
+│   │<br>
+
+│   └── <span class="folder-name">sequences/</span><br>
+
+│<br>
+
+├── <span class="folder-name">models/</span><br>
+
+│   └── <span class="folder-name">activity_model/</span><br>
+
+│       ├── <span class="file">activity_lstm.pth</span><br>
+
+│       ├── <span class="file">labels.json</span><br>
+
+│       ├── <span class="file">metadata.json</span><br>
+
+│       └── <span class="file">training_history.json</span><br>
+
+│<br>
+
+├── <span class="folder-name">src/</span><br>
+
+├── <span class="folder-name">gui/</span><br>
+
+├── <span class="file">main.py</span><br>
+
+├── <span class="file">config.json</span><br>
+
+└── <span class="file">requirements.txt</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     TRAINING
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>07 // TRAINING PIPELINE</span>
+
+<h2>From Video to AI Model</h2>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card reveal">
+
+<div class="card-icon">01</div>
+
+<h3>Collect</h3>
+
+<p>
+Record or generate correctly labeled activity videos.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">02</div>
+
+<h3>Prepare</h3>
+
+<p>
+Use the dataset-preparation pipeline to convert video
+information into model-ready temporal sequences.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">03</div>
+
+<h3>Train</h3>
+
+<p>
+Train the LSTM using the generated sequences and configured
+training parameters.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">04</div>
+
+<h3>Evaluate</h3>
+
+<p>
+Measure model behavior on the evaluation dataset and inspect
+training history.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">05</div>
+
+<h3>Test</h3>
+
+<p>
+Run the trained model against unseen videos.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">06</div>
+
+<h3>Deploy</h3>
+
+<p>
+Run the complete inference pipeline locally through the GUI
+or command-line interface.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     COMMANDS
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>08 // TERMINAL</span>
+
+<h2>Project Commands</h2>
+
+</div>
+
+
+<div class="commands">
+
+<div class="command reveal">
+
+<small>Launch GUI</small>
+
+python main.py
+
+</div>
+
+
+<div class="command reveal">
+
+<small>Prepare Dataset</small>
+
+python main.py --prepare-data
+
+</div>
+
+
+<div class="command reveal">
+
+<small>Train Model</small>
+
+python main.py --train
+
+</div>
+
+
+<div class="command reveal">
+
+<small>Evaluate Model</small>
+
+python main.py --evaluate
+
+</div>
+
+
+<div class="command reveal">
+
+<small>CLI Mode</small>
+
+python main.py --cli
+
+</div>
+
+
+<div class="command reveal">
+
+<small>CLI Video Inference</small>
+
+python main.py --cli --source video.mp4
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     GUI
+===================================================== -->
+
+<section id="gui">
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>09 // USER INTERFACE</span>
+
+<h2>Inference Dashboard</h2>
+
+<p>
+The graphical interface provides a visual way to monitor the
+video pipeline and activity recognition process.
+</p>
+
+</div>
+
+
+<div class="dashboard">
+
+<div class="monitor reveal">
+
+<div class="monitor-title">
+
+<span>SYSTEM STATUS</span>
+
+<span class="online">● ONLINE</span>
+
+</div>
+
+
+<div class="monitor-row">
+
+<span>Video Pipeline</span>
+
+<span class="online">ACTIVE</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>Pose Detection</span>
+
+<span class="online">RUNNING</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>LSTM Inference</span>
+
+<span class="online">RUNNING</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>Processing Mode</span>
+
+<span>LOCAL</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>Cloud Dependency</span>
+
+<span class="online">NONE</span>
+
+</div>
+
+</div>
+
+
+<div class="monitor reveal">
+
+<div class="monitor-title">
+
+<span>INFERENCE</span>
+
+<span class="warning">LIVE</span>
+
+</div>
+
+
+<div class="monitor-row">
+
+<span>Activity</span>
+
+<span class="cyan">UNKNOWN</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>Confidence</span>
+
+<span>27.1%</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>Sequence</span>
+
+<span>30 FRAMES</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>Input</span>
+
+<span>VIDEO</span>
+
+</div>
+
+<div class="monitor-row">
+
+<span>Decision</span>
+
+<span class="warning">LOW CONFIDENCE</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div style="height:30px"></div>
+
+
+<div class="panel reveal">
+
+<h3>Why "Unknown"?</h3>
+
+<p style="color:var(--muted);line-height:1.8">
+
+BAS-HAR applies confidence filtering to avoid treating uncertain
+predictions as reliable classifications. When the predicted
+confidence falls below the configured threshold, the interface
+can report <strong style="color:white">Unknown</strong>.
+
+This is particularly important for the development phase because
+the current model contains generic activity classes and is not
+yet a fully trained BAS-specific model.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     OFFLINE
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>10 // EDGE AI</span>
+
+<h2>Offline Operation</h2>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card reveal">
+
+<div class="card-icon">☁️</div>
+
+<h3>No Cloud Inference</h3>
+
+<p>
+The core recognition pipeline can operate locally without
+sending the video to a remote AI service.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">🔒</div>
+
+<h3>Local Processing</h3>
+
+<p>
+Video processing, pose estimation and LSTM inference are
+performed on the local system.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<div class="card-icon">📡</div>
+
+<h3>Communication Efficiency</h3>
+
+<p>
+A future deployment can transmit activity information rather
+than continuously transmitting raw video, depending on mission
+requirements.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     TECHNOLOGY
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>11 // TECHNOLOGY STACK</span>
+
+<h2>Built With</h2>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card reveal">
+
+<h3>Python</h3>
+
+<p>
+Core programming language used throughout the project.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<h3>PyTorch</h3>
+
+<p>
+Deep-learning framework used for the LSTM activity-recognition
+model.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<h3>YOLO Pose</h3>
+
+<p>
+Used for human pose/keypoint detection from video frames.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<h3>OpenCV</h3>
+
+<p>
+Video processing, frame handling and computer-vision pipeline
+operations.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<h3>NumPy</h3>
+
+<p>
+Numerical processing and representation of model features and
+sequences.
+</p>
+
+</div>
+
+
+<div class="card reveal">
+
+<h3>GUI</h3>
+
+<p>
+Graphical interface for video input, inference visualization,
+status monitoring and activity timelines.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     PROJECT STRUCTURE
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>12 // CODEBASE</span>
+
+<h2>Project Structure</h2>
+
+</div>
+
+
+<div class="folder reveal">
+
+<span class="folder-name">BAS-HAR/</span><br>
+│<br>
+
+├── <span class="folder-name">data/</span><br>
+│   ├── <span class="folder-name">raw/</span><br>
+│   └── <span class="folder-name">sequences/</span><br>
+│<br>
+
+├── <span class="folder-name">models/</span><br>
+│   └── <span class="folder-name">activity_model/</span><br>
+│       ├── activity_lstm.pth<br>
+│       ├── labels.json<br>
+│       ├── metadata.json<br>
+│       └── training_history.json<br>
+│<br>
+
+├── <span class="folder-name">src/</span><br>
+│   └── activity_recognition.py<br>
+│<br>
+
+├── <span class="folder-name">gui/</span><br>
+│   └── inference_thread.py<br>
+│<br>
+
+├── <span class="folder-name">recording/</span><br>
+│<br>
+
+├── config.json<br>
+├── main.py<br>
+└── requirements.txt
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     ROADMAP
+===================================================== -->
+
+<section id="roadmap">
+
+<div class="container">
+
+<div class="section-title reveal">
+
+<span>13 // DEVELOPMENT</span>
+
+<h2>Roadmap</h2>
+
+<p>
+The current prototype provides the foundation for a more
+specialized BAS activity-recognition system.
+</p>
+
+</div>
+
+
+<div class="timeline">
+
+<div class="timeline-item reveal">
+
+<div class="timeline-content">
+
+<h3>01 — BAS Dataset</h3>
+
+<p>
+Create a dedicated dataset containing correctly labeled
+experiment-specific activities.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item reveal">
+
+<div class="timeline-content">
+
+<h3>02 — Activity Vocabulary</h3>
+
+<p>
+Define the final set of experiment activities based on the
+actual BAS experimental procedure.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item reveal">
+
+<div class="timeline-content">
+
+<h3>03 — Model Training</h3>
+
+<p>
+Train and validate the LSTM using the BAS-specific dataset
+instead of relying on generic activity classes.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item reveal">
+
+<div class="timeline-content">
+
+<h3>04 — Object Interaction</h3>
+
+<p>
+Integrate object detection and hand-object interaction features
+for experiment-specific recognition.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item reveal">
+
+<div class="timeline-content">
+
+<h3>05 — Robust Recognition</h3>
+
+<p>
+Improve robustness across camera viewpoints, body orientations,
+lighting conditions and environmental changes.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item reveal">
+
+<div class="timeline-content">
+
+<h3>06 — Edge Deployment</h3>
+
+<p>
+Optimize the complete pipeline for a standalone edge-computing
+environment.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="timeline-item reveal">
+
+<div class="timeline-content">
+
+<h3>07 — Experiment Validation</h3>
+
+<p>
+Validate the system against predefined experimental workflows
+and measure recognition reliability.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL
+===================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="panel reveal" style="text-align:center;padding:60px 30px;">
+
+<div class="status">
+
+<div class="status-dot"></div>
+
+BAS-HAR DEVELOPMENT SYSTEM
+
+</div>
+
+<h2 style="
+font-family:Orbitron;
+font-size:clamp(30px,5vw,55px);
+margin-bottom:20px;
+">
+
+LOCAL INTELLIGENCE.<br>
+
+<span style="
+background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
+-webkit-background-clip:text;
+color:transparent;
+">
+
+ACTIVITY UNDERSTANDING.
+
+</span>
+
+</h2>
+
+<p style="
+max-width:750px;
+margin:auto;
+color:var(--muted);
+line-height:1.8;
+">
+
+BAS-HAR is being developed as an offline Human Activity
+Recognition platform capable of converting visual observations
+into meaningful activity information through computer vision
+and temporal deep learning.
+
+</p>
+
+<div class="hero-buttons">
+
+<a href="#home" class="btn btn-primary">
+BACK TO TOP
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+<div class="container">
+
+<div class="footer-logo">
+
+BAS-HAR
+
+</div>
+
+<p>
+
+Human Activity Recognition for BAS Experiments<br>
+
+Offline Computer Vision • Pose Estimation • Temporal AI
+
+</p>
+
+<div class="footer-links">
+
+<a href="#overview">Overview</a>
+
+<a href="#architecture">Architecture</a>
+
+<a href="#model">Model</a>
+
+<a href="#dataset">Dataset</a>
+
+<a href="#roadmap">Roadmap</a>
+
+</div>
+
+<p style="margin-top:30px;opacity:0.5">
+
+© 2026 BAS-HAR Project
+
+</p>
+
+</div>
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+function toggleMenu() {
+
+    const nav = document.querySelector(".nav-links");
+
+    nav.classList.toggle("active");
+
+}
+
+
+/* =========================================
+   CLOSE MOBILE MENU
+========================================= */
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        document
+            .querySelector(".nav-links")
+            .classList.remove("active");
+
+    });
+
+});
+
+
+/* =========================================
+   SCROLL REVEAL
+========================================= */
+
+const observer = new IntersectionObserver(
+
+    entries => {
+
+        entries.forEach(entry => {
+
+            if(entry.isIntersecting) {
+
+                entry.target.classList.add("active");
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold: 0.12
+    }
+
+);
+
+
+document.querySelectorAll(".reveal").forEach(element => {
+
+    observer.observe(element);
+
+});
+
+
+/* =========================================
+   NUMBER COUNTER
+========================================= */
+
+function animateNumber(element, target) {
+
+    let current = 0;
+
+    const duration = 1200;
+
+    const start = performance.now();
+
+    function update(time) {
+
+        const progress =
+            Math.min((time - start) / duration, 1);
+
+        current = Math.floor(progress * target);
+
+        element.textContent = current;
+
+        if(progress < 1) {
+
+            requestAnimationFrame(update);
+
+        }
+
+    }
+
+    requestAnimationFrame(update);
+
+}
+
+
+/* =========================================
+   NAVBAR SCROLL EFFECT
+========================================= */
+
+window.addEventListener("scroll", () => {
+
+    const navbar =
+        document.querySelector(".navbar");
+
+    if(window.scrollY > 50) {
+
+        navbar.style.background =
+            "rgba(5,6,11,0.9)";
+
+    } else {
+
+        navbar.style.background =
+            "rgba(5,6,11,0.65)";
+
+    }
+
+});
+
+
+/* =========================================
+   CURSOR GLOW
+========================================= */
+
+const glow = document.createElement("div");
+
+glow.style.position = "fixed";
+glow.style.width = "250px";
+glow.style.height = "250px";
+glow.style.borderRadius = "50%";
+glow.style.pointerEvents = "none";
+glow.style.background =
+    "radial-gradient(circle, rgba(0,234,255,0.06), transparent 70%)";
+
+glow.style.transform = "translate(-50%, -50%)";
+glow.style.zIndex = "-1";
+
+document.body.appendChild(glow);
+
+
+document.addEventListener("mousemove", e => {
+
+    glow.style.left = e.clientX + "px";
+    glow.style.top = e.clientY + "px";
+
+});
+
+</script>
+
+</body>
+</html>
