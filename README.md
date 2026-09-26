@@ -259,5 +259,14 @@ To add a new activity (e.g. `pressing`):
 1. Create folder `data/raw/pressing/`.
 2. Add video clips of the pressing action.
 3. Run `python main.py --prepare-data`.
+
+
+## License
+
+MIT License — Hackathon Prototype
+
+## Authors
+
+Built for BAS (Bharatiya Antariksh Station) hackathon.
 4. Run `python main.py --train`.
 5. Run `python main.py` to recognize the new activity immediately! No code changes required.
